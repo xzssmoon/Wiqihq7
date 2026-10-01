@@ -1,0 +1,2301 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+<title>Для Веры 💘</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; overflow: hidden; }
+
+  body {
+    font-family: 'Segoe UI', 'Georgia', serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ff9ec7;
+    transition: background 0.65s ease;
+    position: relative;
+    --glow: #ff4f9a;
+    touch-action: manipulation;
+  }
+
+  .floaty {
+    position: fixed;
+    pointer-events: none;
+    opacity: 0.5;
+    animation: floatUp linear infinite;
+    z-index: 0;
+    user-select: none;
+  }
+  @keyframes floatUp {
+    0%   { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+    10%  { opacity: 0.6; }
+    90%  { opacity: 0.6; }
+    100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+  }
+
+  .bg-spark {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 1;
+    transition: background 0.7s ease, box-shadow 0.7s ease;
+    animation: bgSparkPulse ease-in-out infinite;
+  }
+  @keyframes bgSparkPulse {
+    0%, 100% { opacity: 0.25; transform: scale(1); }
+    50%      { opacity: 0.95; transform: scale(1.7); }
+  }
+
+  .book-scene { perspective: 2400px; z-index: 5; position: relative; }
+
+  .book {
+    width: 500px;
+    height: 720px;
+    position: relative;
+    transform-style: preserve-3d;
+    transform: translateX(14px) rotateZ(-0.6deg);
+  }
+
+  .sheet {
+    position: absolute;
+    inset: 0;
+    border-radius: 4px 18px 18px 4px;
+    transform-origin: left center;
+    transform-style: preserve-3d;
+    transition: transform 2s cubic-bezier(0.45, 0.05, 0.2, 1);
+    backface-visibility: hidden;
+    padding: 42px 34px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+    box-shadow:
+      -1px 0 0 rgba(0,0,0,0.06),
+      -3px 0 0 rgba(0,0,0,0.04),
+      -5px 0 0 rgba(0,0,0,0.03),
+      3px 3px 14px rgba(120,20,80,0.22);
+  }
+
+  .sheet.flipped { transform: rotateY(-180deg); }
+
+  .sheet::after {
+    content: "";
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 18px;
+    background: linear-gradient(90deg, rgba(0,0,0,0.18), transparent);
+    pointer-events: none;
+    border-radius: 4px 0 0 4px;
+  }
+  .sheet::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 20% 25%, rgba(255,255,255,0.8) 1.5px, transparent 2px),
+      radial-gradient(circle at 75% 35%, rgba(255,255,255,0.6) 2px, transparent 3px),
+      radial-gradient(circle at 40% 75%, rgba(255,255,255,0.55) 1.5px, transparent 2px),
+      radial-gradient(circle at 88% 82%, rgba(255,255,255,0.7) 1.5px, transparent 2px);
+    pointer-events: none;
+    opacity: 0.85;
+  }
+  .sheet > * { position: relative; z-index: 1; }
+
+  .cover {
+    background: linear-gradient(160deg, #ff4f9a 0%, #ff7eb3 50%, #ff4f9a 100%);
+    color: #fff;
+    z-index: 20;
+    padding: 32px 26px;
+  }
+  .cover-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    gap: 16px;
+  }
+  .cover-top {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    width: 100%;
+    text-align: left;
+  }
+  .cover-photo-square {
+    width: 118px;
+    height: 118px;
+    border-radius: 14px;
+    object-fit: cover;
+    border: 3px solid rgba(255,255,255,0.95);
+    box-shadow: 0 0 20px rgba(255,255,255,0.75), 0 0 45px rgba(255,255,255,0.5);
+    flex-shrink: 0;
+  }
+  .cover-lines {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-top: 4px;
+  }
+  .cover-line-name {
+    font-size: 1.45rem;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+    text-shadow: 0 0 16px rgba(255,255,255,0.9), 0 3px 12px rgba(120,0,60,0.5);
+    line-height: 1.15;
+  }
+  .cover-line {
+    font-size: 0.92rem;
+    opacity: 0.95;
+    line-height: 1.35;
+    font-weight: 500;
+  }
+  .cover-line-italic {
+    font-style: italic;
+    opacity: 0.9;
+    font-size: 0.88rem;
+  }
+  .cover-divider {
+    width: 60%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.85), transparent);
+    margin: 8px 0;
+    border-radius: 2px;
+  }
+  .cover-heart {
+    font-size: 4rem;
+    animation: coverHeart 2s ease-in-out infinite;
+    filter: drop-shadow(0 0 25px rgba(255,255,255,0.95));
+    margin: 4px 0;
+  }
+  @keyframes coverHeart {
+    0%, 100% { transform: scale(1) rotate(-3deg); }
+    50%      { transform: scale(1.15) rotate(3deg); }
+  }
+  .cover-main-text {
+    font-size: 1.05rem;
+    line-height: 1.55;
+    opacity: 0.97;
+    padding: 0 6px;
+    text-shadow: 0 2px 8px rgba(120,0,60,0.4);
+  }
+  .cover-hint {
+    position: absolute;
+    bottom: 22px;
+    font-size: 0.88rem;
+    animation: hintPulse 2s ease-in-out infinite;
+    width: 100%;
+    text-align: center;
+    letter-spacing: 0.5px;
+  }
+  @keyframes hintPulse {
+    0%, 100% { opacity: 0.45; }
+    50%      { opacity: 1; }
+  }
+
+  .page-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+  }
+
+  .page-title {
+    font-size: 1.9rem;
+    font-weight: 800;
+    margin-bottom: 6px;
+    text-shadow: 0 0 18px rgba(255,255,255,0.8);
+  }
+  .page-text {
+    font-size: 1.18rem;
+    line-height: 1.7;
+    font-weight: 500;
+    padding: 0 6px;
+  }
+  .page-photo {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid #fff;
+    box-shadow: 0 0 25px rgba(255,255,255,0.9), 0 0 60px var(--sheet-glow, rgba(255,100,160,0.5));
+    margin-bottom: 6px;
+    animation: photoPulse 3s ease-in-out infinite;
+  }
+  @keyframes photoPulse {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.05); }
+  }
+  .page-emoji {
+    font-size: 3.8rem;
+    animation: pulse 2s ease-in-out infinite;
+    filter: drop-shadow(0 0 25px var(--sheet-glow, rgba(255,100,160,0.5)));
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.15); }
+  }
+
+  .next-btn {
+    border: none;
+    cursor: pointer;
+    padding: 16px 42px;
+    border-radius: 40px;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #fff;
+    background: linear-gradient(135deg, var(--btn-c1, #ff7eb3), var(--btn-c2, #ff4f9a));
+    box-shadow:
+      0 0 20px var(--btn-glow, rgba(255,79,154,0.9)),
+      0 0 40px var(--btn-glow, rgba(255,79,154,0.6)),
+      inset 0 0 15px rgba(255,255,255,0.4);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+    margin-top: 18px;
+    font-family: inherit;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  }
+  .next-btn:hover {
+    transform: translateY(-3px) scale(1.04);
+    box-shadow:
+      0 0 30px var(--btn-glow, rgba(255,79,154,1)),
+      0 0 60px var(--btn-glow, rgba(255,79,154,0.8)),
+      0 0 100px var(--btn-glow, rgba(255,79,154,0.5)),
+      inset 0 0 20px rgba(255,255,255,0.5);
+  }
+  .next-btn:active {
+    transform: translateY(-1px) scale(0.98);
+    filter: blur(0.5px) brightness(1.15);
+  }
+
+  .q-progress {
+    position: absolute;
+    top: 16px;
+    left: 0; right: 0;
+    text-align: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    opacity: 0.85;
+  }
+
+  .secret-bg {
+    position: fixed;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 90;
+    text-align: center;
+    padding: 8px 20px;
+    background: rgba(255,255,255,0.35);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.6);
+    box-shadow: 0 0 20px rgba(255,79,154,0.5);
+    display: none;
+  }
+  .secret-bg.visible { display: block; animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+  .secret-bg-label {
+    font-size: 0.65rem;
+    color: #8a1f52;
+    font-weight: 600;
+    opacity: 0.75;
+    margin-bottom: 5px;
+    letter-spacing: 0.3px;
+  }
+  .secret-bg-btn {
+    border: none;
+    background: linear-gradient(135deg, #ff7eb3, #ff4f9a);
+    color: #fff;
+    padding: 7px 22px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    cursor: pointer;
+    font-family: inherit;
+    box-shadow: 0 0 15px rgba(255,79,154,0.7), inset 0 0 10px rgba(255,255,255,0.3);
+    transition: transform 0.2s;
+  }
+  .secret-bg-btn:hover { transform: scale(1.05); }
+  .secret-bg-btn:active { transform: scale(0.95); }
+
+  .message-slava-bg {
+    position: fixed;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 91;
+    text-align: center;
+    display: none;
+  }
+  .message-slava-bg.visible { display: block; animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+  .message-slava-btn {
+    border: none;
+    background: linear-gradient(135deg, #ff7eb3, #ff4f9a);
+    color: #fff;
+    padding: 10px 24px;
+    border-radius: 24px;
+    font-size: 0.85rem;
+    font-weight: 800;
+    cursor: pointer;
+    font-family: inherit;
+    box-shadow: 0 0 18px rgba(255,79,154,0.8), inset 0 0 12px rgba(255,255,255,0.3);
+    transition: transform 0.2s;
+    letter-spacing: 0.3px;
+  }
+  .message-slava-btn:hover { transform: scale(1.05); }
+  .message-slava-btn:active { transform: scale(0.95); }
+
+  .back-cover {
+    background: linear-gradient(160deg, #ffe4f0 0%, #ffd1e6 60%, #ffb8d9 100%);
+    color: #8a1f52;
+    text-align: center;
+    padding: 40px 30px;
+  }
+  .back-cover .big-text {
+    font-size: 1.4rem;
+    font-weight: 800;
+    line-height: 1.55;
+    margin-bottom: 22px;
+    text-shadow: 0 0 18px rgba(255,255,255,0.9);
+  }
+  .back-cover .emoji-gift {
+    font-size: 3.6rem;
+    margin-bottom: 14px;
+    animation: giftShake 2s ease-in-out infinite;
+    filter: drop-shadow(0 0 30px rgba(255,79,154,0.7));
+  }
+  @keyframes giftShake {
+    0%, 100% { transform: rotate(-7deg); }
+    50%      { transform: rotate(7deg) scale(1.12); }
+  }
+  .gift-btn {
+    border: 2px solid #fff;
+    cursor: pointer;
+    padding: 18px 44px;
+    border-radius: 44px;
+    font-size: 1.18rem;
+    font-weight: 800;
+    color: #fff;
+    background: linear-gradient(135deg, #ff7eb3, #ff4f9a);
+    box-shadow:
+      0 0 25px rgba(255,79,154,0.9),
+      0 0 55px rgba(255,79,154,0.6),
+      inset 0 0 18px rgba(255,255,255,0.4);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    font-family: inherit;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 6px rgba(120,0,60,0.4);
+  }
+  .gift-btn:hover { transform: translateY(-4px) scale(1.06); }
+  .gift-btn:active { filter: blur(0.5px) brightness(1.15); }
+
+  .admin-link {
+    position: fixed;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.7rem;
+    color: #fff;
+    opacity: 0.55;
+    cursor: pointer;
+    z-index: 10;
+    letter-spacing: 0.5px;
+    user-select: none;
+    transition: opacity 0.3s ease;
+    font-weight: 600;
+    padding: 6px 14px;
+    text-shadow: 0 0 10px rgba(255,79,154,1), 0 1px 4px rgba(120,0,60,0.6);
+    display: none;
+  }
+  .admin-link:hover { opacity: 1; }
+
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(60, 5, 40, 0.45);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 20px;
+    animation: fadeIn 0.45s ease;
+    overflow-y: auto;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  .modal {
+    background: rgba(255,255,255,0.96);
+    backdrop-filter: blur(16px);
+    padding: 36px 28px;
+    border-radius: 24px;
+    max-width: 440px;
+    width: 100%;
+    text-align: center;
+    animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    border: 2px solid rgba(255,255,255,0.9);
+    box-shadow:
+      0 0 30px var(--modal-glow, rgba(255,79,154,0.7)),
+      0 0 70px var(--modal-glow, rgba(255,79,154,0.4)),
+      0 20px 60px rgba(120,20,80,0.3);
+    margin: auto;
+  }
+  @keyframes popIn {
+    from { transform: scale(0.85); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+  }
+  .modal-emoji { font-size: 2.8rem; margin-bottom: 14px; }
+  .modal-text {
+    font-size: 1.18rem;
+    color: #8a1f52;
+    font-weight: 700;
+    margin-bottom: 22px;
+    line-height: 1.5;
+  }
+  .modal-btns { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+
+  .btn {
+    border: none;
+    cursor: pointer;
+    padding: 14px 28px;
+    border-radius: 32px;
+    font-size: 1.02rem;
+    font-weight: 800;
+    color: #fff;
+    background: linear-gradient(135deg, #ff7eb3, #ff4f9a);
+    box-shadow: 0 0 20px rgba(255,79,154,0.85), 0 0 45px rgba(255,79,154,0.55);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    font-family: inherit;
+    min-width: 120px;
+  }
+  .btn:hover { transform: translateY(-3px) scale(1.04); }
+  .btn:active { filter: blur(0.5px) brightness(1.15); }
+  .btn-no { background: linear-gradient(135deg, #c9a0dc, #a875c9); box-shadow: 0 0 20px rgba(168,117,201,0.85), 0 0 45px rgba(168,117,201,0.55); }
+  .btn-full { width: 100%; }
+
+  .q-title {
+    font-size: 1.3rem;
+    font-weight: 800;
+    margin-bottom: 22px;
+    line-height: 1.45;
+    text-shadow: 0 0 18px rgba(255,255,255,0.8);
+  }
+  .q-btns { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+  .q-btn {
+    border: none;
+    cursor: pointer;
+    padding: 16px 40px;
+    border-radius: 34px;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #fff;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    font-family: inherit;
+    min-width: 130px;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  }
+  .q-btn:hover:not(:disabled) { transform: translateY(-3px) scale(1.05); }
+  .q-btn:active:not(:disabled) { filter: blur(0.5px) brightness(1.15); }
+  .q-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .q-feedback { font-size: 1.05rem; margin-top: 18px; min-height: 26px; font-weight: 800; }
+  .q-ok { color: #0f8a4a; }
+  .q-bad { color: #c22069; }
+  .q-attempts { font-size: 0.92rem; margin-top: 12px; color: #8a3a60; font-weight: 700; min-height: 18px; }
+  .q-progress-top {
+    position: absolute;
+    top: 14px; left: 0; right: 0;
+    text-align: center;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    opacity: 0.85;
+  }
+
+  .hint-text {
+    font-size: 0.85rem;
+    color: #8a3a60;
+    margin-top: 14px;
+    padding: 10px 12px;
+    background: rgba(255,255,255,0.6);
+    border-radius: 10px;
+    border: 1px dashed #ff7eb3;
+    line-height: 1.45;
+    font-weight: 600;
+  }
+
+  .input-field {
+    width: 100%;
+    padding: 14px 18px;
+    border: 2px solid #ffd1e6;
+    border-radius: 14px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #8a1f52;
+    outline: none;
+    margin-bottom: 14px;
+    font-family: inherit;
+    text-align: center;
+    background: #fff;
+    transition: border-color 0.2s;
+  }
+  .input-field:focus { border-color: #ff4f9a; }
+  textarea.input-field {
+    text-align: left;
+    resize: vertical;
+    min-height: 80px;
+    font-size: 1rem;
+  }
+
+  .photo-preview {
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+    border-radius: 16px;
+    border: 3px solid #fff;
+    box-shadow: 0 0 20px rgba(255,79,154,0.6);
+    margin: 10px auto;
+    display: block;
+  }
+  .photo-upload-label {
+    display: inline-block;
+    cursor: pointer;
+    padding: 14px 28px;
+    border-radius: 32px;
+    font-size: 1rem;
+    font-weight: 800;
+    color: #fff;
+    background: linear-gradient(135deg, #ff7eb3, #ff4f9a);
+    box-shadow: 0 0 20px rgba(255,79,154,0.85);
+    transition: transform 0.2s;
+    font-family: inherit;
+    margin: 6px 0;
+  }
+  .photo-upload-label:hover { transform: translateY(-2px) scale(1.03); }
+
+  .timer {
+    font-size: 2.6rem;
+    font-weight: 900;
+    letter-spacing: 3px;
+    margin: 18px 0;
+    text-shadow: 0 0 25px currentColor;
+  }
+
+  .flying-word {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9000;
+    font-weight: 900;
+    white-space: nowrap;
+    animation: flyDown linear forwards;
+    text-shadow:
+      0 0 8px #fff,
+      0 0 16px #fff,
+      0 0 24px currentColor,
+      0 0 40px currentColor,
+      0 2px 4px rgba(0,0,0,0.4);
+    letter-spacing: 0.5px;
+  }
+  @keyframes flyDown {
+    0%   { transform: translateY(-80px) scale(0.5) rotate(var(--rot)); opacity: 0; }
+    12%  { opacity: 1; transform: translateY(20px) scale(1.1) rotate(var(--rot)); }
+    88%  { opacity: 1; }
+    100% { transform: translateY(108vh) scale(0.9) rotate(var(--rot)); opacity: 0; }
+  }
+
+  .spark {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+  }
+  @keyframes sparkFly {
+    0%   { transform: translate(0, 0) scale(1); opacity: 1; }
+    70%  { opacity: 0.85; }
+    100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; }
+  }
+
+  .final-card {
+    max-width: 460px;
+    width: 100%;
+    background: rgba(255,255,255,0.97);
+    backdrop-filter: blur(16px);
+    border-radius: 24px;
+    padding: 30px 24px 34px;
+    text-align: center;
+    animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    border: 2px solid rgba(255,255,255,0.9);
+    box-shadow: 0 0 30px rgba(255,79,154,0.7), 0 0 70px rgba(255,79,154,0.4), 0 20px 60px rgba(120,20,80,0.3);
+    position: relative;
+    margin: auto;
+  }
+  .final-photo {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 4px solid #fff;
+    box-shadow: 0 0 18px rgba(255,79,154,0.7), 0 0 40px rgba(255,79,154,0.4);
+    margin: 0 auto 16px;
+    display: block;
+    animation: photoPulse 3s ease-in-out infinite;
+  }
+  .final-name {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #8a1f52;
+    margin-bottom: 6px;
+  }
+  .final-subtitle {
+    font-size: 1.05rem;
+    color: #5e1c3e;
+    font-weight: 600;
+    margin-bottom: 22px;
+    line-height: 1.5;
+  }
+  .final-btn {
+    width: 100%;
+    border: none;
+    cursor: pointer;
+    padding: 18px;
+    border-radius: 36px;
+    font-size: 1.18rem;
+    font-weight: 900;
+    color: #fff;
+    background: linear-gradient(135deg, #ff7eb3, #ff4f9a);
+    box-shadow: 0 0 25px rgba(255,79,154,0.95), 0 0 60px rgba(255,79,154,0.6), inset 0 0 18px rgba(255,255,255,0.45);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    font-family: inherit;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 8px rgba(120,0,60,0.5);
+    animation: finalBtnPulse 2s ease-in-out infinite;
+    margin-bottom: 12px;
+  }
+  @keyframes finalBtnPulse {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.025); }
+  }
+  .final-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 0 35px rgba(255,79,154,1), 0 0 80px rgba(255,79,154,0.8);
+  }
+  .final-btn:active { filter: blur(0.5px) brightness(1.15); }
+
+  .final-btn-restart {
+    width: 100%;
+    border: 2px solid #ff7eb3;
+    cursor: pointer;
+    padding: 16px;
+    border-radius: 36px;
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #c22069;
+    background: rgba(255,255,255,0.95);
+    box-shadow: 0 0 18px rgba(255,79,154,0.5), inset 0 0 15px rgba(255,192,222,0.4);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    font-family: inherit;
+    letter-spacing: 0.5px;
+  }
+  .final-btn-restart:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 0 25px rgba(255,79,154,0.75);
+    background: #fff0f7;
+  }
+  .final-copied {
+    font-size: 0.9rem;
+    color: #0f8a4a;
+    font-weight: 800;
+    min-height: 22px;
+    text-align: center;
+    margin-top: 6px;
+  }
+  .final-signature {
+    text-align: center;
+    font-size: 0.85rem;
+    color: #a85578;
+    margin-top: 14px;
+    font-weight: 600;
+  }
+
+  .admin-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(30,5,20,0.7);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    padding: 20px;
+    animation: fadeIn 0.3s ease;
+  }
+  .admin-panel {
+    background: #fff;
+    border-radius: 20px;
+    max-width: 640px;
+    width: 100%;
+    max-height: 88vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    animation: popIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .admin-header {
+    padding: 20px 24px;
+    background: linear-gradient(135deg, #ff7eb3, #ff4f9a);
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .admin-header h2 { font-size: 1.1rem; font-weight: 800; }
+  .admin-close {
+    background: rgba(255,255,255,0.25);
+    border: none;
+    color: #fff;
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: 700;
+    font-family: inherit;
+  }
+  .admin-body { padding: 22px 24px; overflow-y: auto; flex: 1; }
+  .admin-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .stat-card {
+    background: #fff0f7;
+    border-radius: 14px;
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ffd1e6;
+  }
+  .stat-value { font-size: 1.5rem; font-weight: 800; color: #c22069; }
+  .stat-label {
+    font-size: 0.7rem;
+    color: #8a3a60;
+    margin-top: 4px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .admin-actions { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  .admin-action-btn {
+    flex: 1;
+    min-width: 120px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ffd1e6;
+    background: #fff;
+    color: #8a1f52;
+    font-weight: 800;
+    font-size: 0.82rem;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .admin-action-btn:hover { background: #fff0f7; border-color: #ff7eb3; }
+  .admin-action-btn.danger { color: #c22069; }
+
+  .visitor-folder {
+    border: 1px solid #ffd1e6;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    background: #fff;
+  }
+  .folder-header {
+    padding: 12px 16px;
+    background: linear-gradient(135deg, #fff0f7, #ffe4f0);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-weight: 800;
+    color: #8a1f52;
+    font-size: 0.95rem;
+    border-bottom: 1px solid #ffe4f0;
+  }
+  .folder-header:hover { background: linear-gradient(135deg, #ffe4f0, #ffd1e6); }
+  .folder-count {
+    background: #ff4f9a;
+    color: #fff;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 800;
+  }
+  .folder-body {
+    padding: 12px 14px;
+    display: none;
+    max-height: 480px;
+    overflow-y: auto;
+  }
+  .folder-body.open { display: block; }
+  .folder-visitor-info {
+    font-size: 0.78rem;
+    color: #8a3a60;
+    background: #fff8fb;
+    padding: 10px 12px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    line-height: 1.6;
+  }
+  .folder-photo {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 2px solid #ff4f9a;
+    margin-top: 6px;
+    box-shadow: 0 0 12px rgba(255,79,154,0.6);
+  }
+  .log-list { display: flex; flex-direction: column; gap: 6px; }
+  .log-item {
+    background: #fff8fb;
+    border-left: 3px solid #ff7eb3;
+    border-radius: 8px;
+    padding: 9px 12px;
+    font-size: 0.8rem;
+    color: #5e1c3e;
+    line-height: 1.5;
+  }
+  .log-time { color: #a85578; font-size: 0.7rem; font-weight: 700; margin-bottom: 3px; }
+  .log-event { font-weight: 800; color: #8a1f52; }
+  .log-detail { color: #7a294f; }
+  .log-empty { text-align: center; color: #a85578; font-style: italic; padding: 20px 10px; font-size: 0.85rem; }
+  .log-type-visit { border-left-color: #6ec6ff; }
+  .log-type-page { border-left-color: #ffd76e; }
+  .log-type-answer { border-left-color: #7ee8a2; }
+  .log-type-error { border-left-color: #ff7b7b; }
+  .log-type-reward { border-left-color: #c48cff; }
+  .log-type-cooldown { border-left-color: #ff5fa2; }
+  .log-type-intro { border-left-color: #ff9ec7; }
+  .log-type-message { border-left-color: #ffb56e; }
+
+  @media (max-width: 560px) {
+    .book { width: 90vw; height: 76vh; max-height: 660px; transform: translateX(8px) rotateZ(-0.5deg); }
+    .page-title { font-size: 1.55rem; }
+    .page-text { font-size: 1.02rem; }
+    .cover-line-name { font-size: 1.15rem; }
+    .page-photo { width: 150px; height: 150px; }
+    .cover-photo-square { width: 90px; height: 90px; }
+    .next-btn { padding: 14px 34px; font-size: 1rem; }
+    .modal { padding: 28px 20px; }
+    .secret-bg { bottom: 50px; padding: 6px 16px; }
+    .message-slava-bg { bottom: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="book-scene">
+  <div class="book" id="book"></div>
+</div>
+
+<div class="secret-bg" id="secretBg">
+  <div class="secret-bg-label">🔒 маленький секретик внизу</div>
+  <button class="secret-bg-btn" id="secretCopyBtn">Скопировать ответ</button>
+</div>
+
+<div class="message-slava-bg" id="messageSlavaBg">
+  <button class="message-slava-btn" id="messageSlavaBtn">💌 Написать Славе</button>
+</div>
+
+<script>
+/* ==========================================================
+   НАСТРОЙКИ
+   ========================================================== */
+const MAX_ATTEMPTS = 3;
+const COOLDOWN_SEC = 120;
+const ADMIN_PASSWORD = "11122";
+const SECRET_ANSWER = "Вера самая лучшая";
+
+const PHOTO_1 = "https://i.ibb.co/ZzkjrDHF/IMG-20260929-163559-724.jpg";
+const PHOTO_2 = "https://i.ibb.co/PZ4q2xg7/IMG-20260929-163557-601.jpg";
+const PHOTO_3 = "https://i.ibb.co/Vp9qwCyV/IMG-20261001-124227-966.jpg";
+
+const coverStyle = {
+  coverBg: "linear-gradient(160deg, #ff7eb3 0%, #ffb0d1 50%, #ff5fa2 100%)",
+  pageBg: "linear-gradient(135deg, #ffb0d1 0%, #ffd6e8 50%, #ff9ec7 100%)",
+  color: "#ff4f9a"
+};
+
+const bookPages = [
+  { pageBg: "linear-gradient(135deg, #ff9ec7 0%, #ffd6e8 50%, #ffb8d9 100%)", sheetBg: "linear-gradient(160deg, #ffe4f0 0%, #ffd1e6 100%)", color: "#ff4f9a", colorDark: "#c22069", photo: PHOTO_1, title: "Приветик 💘", text: "Эта маленькая книжка сделана специально для тебя 💌" },
+  { pageBg: "linear-gradient(135deg, #ffd76e 0%, #fff0c9 50%, #ffc94d 100%)", sheetBg: "linear-gradient(160deg, #fff6d6 0%, #ffe8a8 100%)", color: "#f0b800", colorDark: "#b88300", photo: PHOTO_2, title: "Солнышко ☀️", text: "Ты очень добрая и светлая. С тобой рядом становится теплее, даже если просто переписываться." },
+  { pageBg: "linear-gradient(135deg, #6ec6ff 0%, #c9e6ff 50%, #8ed0ff 100%)", sheetBg: "linear-gradient(160deg, #e4f2ff 0%, #c2dcff 100%)", color: "#2b8fe0", colorDark: "#1a5c94", photo: PHOTO_3, title: "Ты — звёздочка ✨", text: "У тебя красивая улыбка и доброе сердце. Не забывай об этом никогда, ладно?", secret: true },
+  { pageBg: "linear-gradient(135deg, #7ee8a2 0%, #d6ffe0 50%, #a8f0c0 100%)", sheetBg: "linear-gradient(160deg, #e4fff0 0%, #c2f0d6 100%)", color: "#1f9e5a", colorDark: "#0f6b3a", photo: null, emoji: "🌿", title: "Просто так", text: "С тобой очень здорово и весело проводить время" },
+  { pageBg: "linear-gradient(135deg, #c48cff 0%, #f0d6ff 50%, #d9a8ff 100%)", sheetBg: "linear-gradient(160deg, #f4e4ff 0%, #e0c2ff 100%)", color: "#8b3fd9", colorDark: "#5f2a94", photo: null, emoji: "🌸", title: "Мне с тобой хорошо", text: "Гулять с тобой и веселиться — это лучшее время!<br><br>Пусть каждый день приносит тебе радость и улыбки 💜" }
+];
+
+const choiceQuestions = [
+  { q: "Ты очень красивая, это правда?", type: "choice", a: ["Да", "Нет"], correct: 0 },
+  { q: "У тебя самая милая улыбка на свете?", type: "choice", a: ["Да", "Нет"], correct: 0 },
+  { q: "Ты умная и сообразительная?", type: "choice", a: ["Да", "Нет"], correct: 0 },
+  { q: "С тобой интересно разговаривать?", type: "choice", a: ["Да", "Нет"], correct: 0 },
+  { q: "Ты заслуживаешь только хорошего?", type: "choice", a: ["Да", "Нет"], correct: 0 },
+  { q: "Ты умеешь делать мир вокруг добрее?", type: "choice", a: ["Да", "Нет"], correct: 0 },
+  { q: "Ты классная, даже когда грустишь?", type: "choice", a: ["Да", "Нет"], correct: 0 },
+  { q: "Ты — настоящая, и это здорово?", type: "choice", a: ["Да", "Нет"], correct: 0 }
+];
+
+const textQuestions = [
+  { q: "Напиши что-нибудь милое Славе 💌", type: "text", placeholder: "Например: спасибо за книжку 💕" },
+  { q: "Какое твоё самое заветное желание?", type: "text", placeholder: "Загадай желание ✨" },
+  { q: "Что тебя радует больше всего?", type: "text", placeholder: "Поделись 🌸" }
+];
+
+const secretQuestion = {
+  q: "Что написано в секретике внизу 3-й страницы? Напиши 👀",
+  type: "text",
+  placeholder: "Напиши ответ...",
+  isSecret: true
+};
+
+function buildQuestionOrder() {
+  const all = [];
+  choiceQuestions.forEach((_, i) => all.push({ group: "choice", idx: i }));
+  textQuestions.forEach((_, i) => all.push({ group: "text", idx: i }));
+  for (let i = all.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [all[i], all[j]] = [all[j], all[i]];
+  }
+  all.push({ group: "secret", idx: 0 });
+  return all;
+}
+
+function normalizeAnswer(s) {
+  return String(s)
+    .toLowerCase()
+    .replace(/ё/g, "е")
+    .replace(/[.,!?;:«»"'`\-_()]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+function isSecretAnswerCorrect(userAnswer) {
+  const user = normalizeAnswer(userAnswer);
+  const correct = normalizeAnswer(SECRET_ANSWER);
+  return user === correct;
+}
+
+const questionStyles = [
+  { pageBg: "linear-gradient(135deg, #ff9ec7 0%, #ffd6e8 50%, #ffb8d9 100%)", sheetBg: "linear-gradient(160deg, #ffe4f0 0%, #ffd1e6 100%)", color: "#ff4f9a", colorDark: "#c22069" },
+  { pageBg: "linear-gradient(135deg, #ffd76e 0%, #fff0c9 50%, #ffc94d 100%)", sheetBg: "linear-gradient(160deg, #fff6d6 0%, #ffe8a8 100%)", color: "#f0b800", colorDark: "#b88300" },
+  { pageBg: "linear-gradient(135deg, #7ee8a2 0%, #d6ffe0 50%, #a8f0c0 100%)", sheetBg: "linear-gradient(160deg, #e4fff0 0%, #c2f0d6 100%)", color: "#1f9e5a", colorDark: "#0f6b3a" },
+  { pageBg: "linear-gradient(135deg, #6ec6ff 0%, #c9e6ff 50%, #8ed0ff 100%)", sheetBg: "linear-gradient(160deg, #e4f2ff 0%, #c2dcff 100%)", color: "#2b8fe0", colorDark: "#1a5c94" },
+  { pageBg: "linear-gradient(135deg, #ff7b7b 0%, #ffd6d6 50%, #ff9e9e 100%)", sheetBg: "linear-gradient(160deg, #ffe4e4 0%, #ffc2c2 100%)", color: "#d92b2b", colorDark: "#8f1a1a" },
+  { pageBg: "linear-gradient(135deg, #c48cff 0%, #f0d6ff 50%, #d9a8ff 100%)", sheetBg: "linear-gradient(160deg, #f4e4ff 0%, #e0c2ff 100%)", color: "#8b3fd9", colorDark: "#5f2a94" },
+  { pageBg: "linear-gradient(135deg, #ff5fa2 0%, #ffc2dd 50%, #ff8ec0 100%)", sheetBg: "linear-gradient(160deg, #ffe0ee 0%, #ffb8d9 100%)", color: "#c22069", colorDark: "#8a1f52" },
+  { pageBg: "linear-gradient(135deg, #6ee8c8 0%, #d6fff4 50%, #a8f0e0 100%)", sheetBg: "linear-gradient(160deg, #e4fff8 0%, #c2f0e4 100%)", color: "#0f9e88", colorDark: "#0a6b5c" },
+  { pageBg: "linear-gradient(135deg, #ffb56e 0%, #ffe8c9 50%, #ffd08e 100%)", sheetBg: "linear-gradient(160deg, #fff0d6 0%, #ffdca8 100%)", color: "#d97a1f", colorDark: "#9a5414" },
+  { pageBg: "linear-gradient(135deg, #ff7eb3 0%, #ffe4f0 50%, #ffa8cd 100%)", sheetBg: "linear-gradient(160deg, #ffe4ee 0%, #ffc2dd 100%)", color: "#e84a8a", colorDark: "#a02b5c" },
+  { pageBg: "linear-gradient(135deg, #b8a0ff 0%, #e8d6ff 50%, #c9a8ff 100%)", sheetBg: "linear-gradient(160deg, #ece4ff 0%, #d9c2ff 100%)", color: "#7b3fd9", colorDark: "#4f2a94" },
+  { pageBg: "linear-gradient(135deg, #ff9ea8 0%, #ffd6dc 50%, #ffb8c2 100%)", sheetBg: "linear-gradient(160deg, #ffe4e8 0%, #ffc2cc 100%)", color: "#e84a5f", colorDark: "#a02b3d" }
+];
+
+const REWARD_TEXT =
+`Подарок от Славы 💖
+ВЕРА САМАЯ ЛУЧШАЯ, ТЫ ПРОСТО ЧУДО 💖 
+
+Вот твой подарочек 😉
+Premium: ... 
+
+Будь всегда такой красивой и весёлой`;
+
+const TELEGRAM_CHAT_URL = "https://t.me/aaaaspaopaqqqqlovewerraaaaa_tu";
+
+const FLYING_WORDS = [
+  "Ты чудо 💖", "Вера, ты лучшая 🌸", "Не грусти ✨", "Ты красивая 💕",
+  "Ты умница 🩷", "Улыбнись 😊", "Всё получится 🌷", "Ты солнышко ☀️",
+  "Ты особенная 💗", "С тобой тепло 🎀", "Ты классная 💫", "Вера — умничка 🌟",
+  "Ты милая 🍓", "Всё будет хорошо 💝", "Ты заслуживаешь счастья 💐", "Ты самая добрая 🌺"
+];
+
+/* ==========================================================
+   ЛОГИ + СОСТОЯНИЕ
+   ========================================================== */
+const LOG_KEY = "vera_site_logs_v7";
+const VISIT_KEY = "vera_visit_id";
+const STATE_KEY = "vera_book_state_v10";
+const COOLDOWN_KEY = "vera_cooldown_until";
+const PROFILE_KEY = "vera_profile";
+
+function loadLogs() {
+  try { return JSON.parse(localStorage.getItem(LOG_KEY)) || []; } catch (e) { return []; }
+}
+function saveLogs(logs) {
+  try { localStorage.setItem(LOG_KEY, JSON.stringify(logs)); } catch (e) {}
+}
+function addLog(type, event, detail) {
+  const logs = loadLogs();
+  const profile = loadProfile();
+  logs.push({
+    time: new Date().toISOString(),
+    type, event, detail: detail || "",
+    visitor: getVisitorId(),
+    visitorName: profile.name || "Без имени",
+    place: profile.place || "",
+    ip: profile.ip || "",
+    city: profile.city || ""
+  });
+  if (logs.length > 2000) logs.splice(0, logs.length - 2000);
+  saveLogs(logs);
+}
+function getVisitorId() {
+  let id = localStorage.getItem(VISIT_KEY);
+  if (!id) {
+    id = "v_" + Date.now() + "_" + Math.random().toString(36).slice(2, 8);
+    localStorage.setItem(VISIT_KEY, id);
+  }
+  return id;
+}
+function loadProfile() {
+  try { return JSON.parse(localStorage.getItem(PROFILE_KEY)) || {}; } catch (e) { return {}; }
+}
+function saveProfile(p) {
+  try { localStorage.setItem(PROFILE_KEY, JSON.stringify(p)); } catch (e) {}
+}
+
+function saveState() {
+  const state = { sheetIndex, overlay, currentQuestion, attemptsLeft, questionOrder, introDone };
+  try { localStorage.setItem(STATE_KEY, JSON.stringify(state)); } catch (e) {}
+  if (lockedUntil > Date.now()) localStorage.setItem(COOLDOWN_KEY, String(lockedUntil));
+  else localStorage.removeItem(COOLDOWN_KEY);
+}
+function loadState() {
+  try { return JSON.parse(localStorage.getItem(STATE_KEY)); } catch (e) { return null; }
+}
+function loadPersistedCooldown() {
+  const saved = localStorage.getItem(COOLDOWN_KEY);
+  if (!saved) return 0;
+  const ts = parseInt(saved, 10);
+  return isNaN(ts) ? 0 : ts;
+}
+function clearState() {
+  try { localStorage.removeItem(STATE_KEY); localStorage.removeItem(COOLDOWN_KEY); } catch (e) {}
+}
+
+/* ==========================================================
+   СОСТОЯНИЕ
+   ========================================================== */
+const body = document.body;
+const bookEl = document.getElementById("book");
+const secretBg = document.getElementById("secretBg");
+const messageSlavaBg = document.getElementById("messageSlavaBg");
+
+let sheetIndex = -1;
+let overlay = "none";
+let currentQuestion = 0;
+let attemptsLeft = MAX_ATTEMPTS;
+let lockedUntil = 0;
+let timerInterval = null;
+let wordTimeoutId = null;
+let adminUnlocked = false;
+let sheets = [];
+let questionOrder = [];
+let introDone = false;
+
+/* ==========================================================
+   ФОН
+   ========================================================== */
+let bgSparkEls = [];
+function createBgSparks() {
+  for (let i = 0; i < 45; i++) {
+    const el = document.createElement("div");
+    el.className = "bg-spark";
+    const size = 2 + Math.random() * 4;
+    el.style.width = size + "px";
+    el.style.height = size + "px";
+    el.style.left = Math.random() * 100 + "vw";
+    el.style.top = Math.random() * 100 + "vh";
+    el.style.animationDuration = (2 + Math.random() * 3) + "s";
+    el.style.animationDelay = (Math.random() * 3) + "s";
+    document.body.appendChild(el);
+    bgSparkEls.push(el);
+  }
+}
+function updateBgSparkColor(color) {
+  body.style.setProperty("--glow", color);
+  bgSparkEls.forEach(el => {
+    el.style.background = color;
+    el.style.boxShadow = `0 0 10px ${color}, 0 0 22px ${color}`;
+  });
+}
+function spawnFloaty() {
+  const symbols = ["💖", "🌸", "✨", "💕", "🩷", "⭐", "🌷", "💗", "🎀", "🍓"];
+  for (let i = 0; i < 16; i++) {
+    const el = document.createElement("div");
+    el.className = "floaty";
+    el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+    el.style.left = Math.random() * 100 + "vw";
+    el.style.fontSize = (12 + Math.random() * 18) + "px";
+    el.style.animationDuration = (12 + Math.random() * 14) + "s";
+    el.style.animationDelay = (Math.random() * 12) + "s";
+    document.body.appendChild(el);
+  }
+}
+
+/* ==========================================================
+   ИСКРЫ
+   ========================================================== */
+function spawnSparks(x, y, color) {
+  const colors = [color, "#ffffff", color, "#fff0f7", color];
+  for (let i = 0; i < 26; i++) {
+    const spark = document.createElement("div");
+    spark.className = "spark";
+    const size = 5 + Math.random() * 9;
+    const c = colors[Math.floor(Math.random() * colors.length)];
+    spark.style.width = size + "px";
+    spark.style.height = size + "px";
+    spark.style.background = c;
+    spark.style.boxShadow = `0 0 10px ${c}, 0 0 22px ${c}`;
+    spark.style.left = x + "px";
+    spark.style.top = y + "px";
+    const angle = Math.random() * Math.PI * 2;
+    const dist = 70 + Math.random() * 130;
+    spark.style.setProperty("--dx", Math.cos(angle) * dist + "px");
+    spark.style.setProperty("--dy", Math.sin(angle) * dist + "px");
+    spark.style.animation = `sparkFly ${1.4 + Math.random() * 0.8}s ease-out forwards`;
+    document.body.appendChild(spark);
+    setTimeout(() => spark.remove(), 2500);
+  }
+}
+function attachSparks(btn, color) {
+  if (!btn) return;
+  btn.addEventListener("click", () => {
+    const rect = btn.getBoundingClientRect();
+    spawnSparks(rect.left + rect.width / 2, rect.top + rect.height / 2, color || "#ff4f9a");
+    btn.style.filter = "blur(1.5px) brightness(1.2)";
+    setTimeout(() => { btn.style.filter = ""; }, 200);
+  });
+}
+
+/* ==========================================================
+   ПРИВЕТСТВЕННЫЕ ВОПРОСЫ
+   ========================================================== */
+function showIntroQuestions() {
+  const step = { n: 1 };
+  const ov = document.createElement("div");
+  ov.className = "modal-overlay";
+  ov.id = "introOverlay";
+  document.body.appendChild(ov);
+
+  const render = () => {
+    const profile = loadProfile();
+    let content = "";
+    if (step.n === 1) {
+      content = `
+        <div class="modal-emoji">💌</div>
+        <div class="modal-text">Как тебя зовут?</div>
+        <input class="input-field" id="introInput" placeholder="Твоё имя" value="${profile.name || ""}" maxlength="30">
+        <button class="btn btn-full" id="introNext">Дальше 💕</button>
+      `;
+    } else if (step.n === 2) {
+      content = `
+        <div class="modal-emoji">🌸</div>
+        <div class="modal-text">Что ты тут хочешь увидеть?</div>
+        <input class="input-field" id="introInput" placeholder="Тёплые слова, сюрпризы..." value="${profile.want || ""}" maxlength="60">
+        <button class="btn btn-full" id="introNext">Дальше 💕</button>
+      `;
+    } else if (step.n === 3) {
+      content = `
+        <div class="modal-emoji">✨</div>
+        <div class="modal-text">Как у тебя настроение сейчас?</div>
+        <input class="input-field" id="introInput" placeholder="Хорошее, отличное, так себе..." value="${profile.mood || ""}" maxlength="40">
+        <button class="btn btn-full" id="introNext">Дальше 💕</button>
+      `;
+    } else {
+      const hasPhoto = !!profile.photo;
+      content = `
+        <div class="modal-emoji">📸</div>
+        <div class="modal-text">Хочешь сделать фото на память?</div>
+        ${hasPhoto ? `<img class="photo-preview" src="${profile.photo}" alt="Фото">` : ""}
+        <input type="file" id="introPhoto" accept="image/*" style="display:none;">
+        <label for="introPhoto" class="photo-upload-label" id="photoLabel">
+          ${hasPhoto ? "Сменить фото 📸" : "Сделать фото 📸"}
+        </label>
+        <button class="btn btn-no btn-full" id="introNext" style="margin-top:8px;">
+          ${hasPhoto ? "Продолжить 💕" : "Пропустить 💕"}
+        </button>
+      `;
+    }
+    ov.innerHTML = `<div class="modal" style="--modal-glow: rgba(255,79,154,0.7);">${content}</div>`;
+
+    if (step.n === 4) {
+      const fileInput = document.getElementById("introPhoto");
+      const nextBtn = document.getElementById("introNext");
+
+      fileInput.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement("canvas");
+            const maxSize = 240;
+            let w = img.width, h = img.height;
+            if (w > h) { if (w > maxSize) { h = h * maxSize / w; w = maxSize; } }
+            else { if (h > maxSize) { w = w * maxSize / h; h = maxSize; } }
+            canvas.width = w;
+            canvas.height = h;
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0, w, h);
+            const dataUrl = canvas.toDataURL("image/jpeg", 0.75);
+            const p = loadProfile();
+            p.photo = dataUrl;
+            saveProfile(p);
+            addLog("intro", "Фото загружено", "Вера добавила фото");
+            render();
+          };
+          img.src = ev.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+
+      nextBtn.addEventListener("click", () => {
+        const p = loadProfile();
+        addLog("intro", "Приветствие пройдено",
+          `Имя: ${p.name} | Хочет: ${p.want} | Настроение: ${p.mood} | Фото: ${p.photo ? "есть" : "нет"}`);
+        introDone = true;
+        ov.remove();
+        saveState();
+        applyBookState();
+      });
+      attachSparks(nextBtn, "#a875c9");
+      return;
+    }
+
+    const input = document.getElementById("introInput");
+    const btn = document.getElementById("introNext");
+    attachSparks(btn, "#ff4f9a");
+    setTimeout(() => input.focus(), 100);
+
+    const proceed = () => {
+      const val = input.value.trim();
+      if (!val) {
+        input.style.borderColor = "#ff4f9a";
+        input.placeholder = "Пожалуйста, заполни 🥺";
+        return;
+      }
+      const p = loadProfile();
+      if (step.n === 1) p.name = val;
+      else if (step.n === 2) p.want = val;
+      else if (step.n === 3) p.mood = val;
+      saveProfile(p);
+      step.n++;
+      render();
+    };
+    btn.onclick = proceed;
+    input.addEventListener("keydown", (e) => { if (e.key === "Enter") proceed(); });
+  };
+  render();
+}
+
+/* ==========================================================
+   ПОСТРОЕНИЕ КНИГИ
+   ========================================================== */
+function buildBook() {
+  const cover = document.createElement("div");
+  cover.className = "sheet cover";
+  cover.style.background = coverStyle.coverBg;
+  cover.style.zIndex = 20;
+  cover.innerHTML = `
+    <div class="cover-inner">
+      <div class="cover-top">
+        <img class="cover-photo-square" src="${PHOTO_1}" alt="Вера">
+        <div class="cover-lines">
+          <div class="cover-line-name">Вера 💘</div>
+          <div class="cover-line">Это для тебя маленькая книжка</div>
+          <div class="cover-line-italic">от Славы, с любовью</div>
+        </div>
+      </div>
+      <div class="cover-divider"></div>
+      <div class="cover-heart">💖</div>
+      <div class="cover-main-text">Приветик 💘<br>Эта маленькая книжка сделана специально для тебя 💌</div>
+    </div>
+    <div class="cover-hint">Нажми, чтобы открыть</div>
+  `;
+  cover.addEventListener("click", openBook);
+  bookEl.appendChild(cover);
+  sheets.push(cover);
+
+  bookPages.forEach((page, idx) => {
+    const sheet = document.createElement("div");
+    sheet.className = "sheet";
+    sheet.style.background = page.sheetBg;
+    sheet.style.setProperty("--sheet-glow", hexToRgba(page.color, 0.55));
+    sheet.style.zIndex = 20 - idx - 1;
+    sheet.innerHTML = renderPageHTML(page, idx + 1, bookPages.length);
+    bookEl.appendChild(sheet);
+    sheets.push(sheet);
+  });
+
+  const backCover = document.createElement("div");
+  backCover.className = "sheet back-cover";
+  backCover.style.zIndex = 4;
+  backCover.innerHTML = `
+    <div class="page-content">
+      <div class="emoji-gift">🎁</div>
+      <div class="big-text">А теперь главный подарок,<br>который я приготовил для тебя 💝</div>
+      <button class="gift-btn" id="giftBtn">Открыть подарок ✨</button>
+    </div>
+  `;
+  bookEl.appendChild(backCover);
+  sheets.push(backCover);
+
+  bookEl.querySelectorAll(".next-btn").forEach(btn => {
+    const pageIdx = parseInt(btn.dataset.page) - 1;
+    const color = bookPages[pageIdx].color;
+    const colorDark = bookPages[pageIdx].colorDark;
+    btn.style.setProperty("--btn-c1", color);
+    btn.style.setProperty("--btn-c2", colorDark);
+    btn.style.setProperty("--btn-glow", hexToRgba(color, 0.9));
+    attachSparks(btn, color);
+    btn.addEventListener("click", (e) => { e.stopPropagation(); turnNextPage(); });
+  });
+
+  const secretBtn = document.getElementById("secretCopyBtn");
+  if (secretBtn) {
+    secretBtn.addEventListener("click", () => {
+      const text = SECRET_ANSWER;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+          secretBtn.textContent = "Скопировано ✓";
+          setTimeout(() => { secretBtn.textContent = "Скопировать ответ"; }, 1500);
+        }).catch(() => fallbackCopySimple(text, secretBtn));
+      } else {
+        fallbackCopySimple(text, secretBtn);
+      }
+    });
+  }
+
+  const msgBtn = document.getElementById("messageSlavaBtn");
+  if (msgBtn) {
+    attachSparks(msgBtn, "#ff4f9a");
+    msgBtn.addEventListener("click", () => openMessageModal());
+  }
+
+  setTimeout(() => {
+    const giftBtn = document.getElementById("giftBtn");
+    if (giftBtn) {
+      attachSparks(giftBtn, "#ff4f9a");
+      giftBtn.addEventListener("click", (e) => { e.stopPropagation(); startQuiz(); });
+    }
+  }, 50);
+}
+
+function fallbackCopySimple(text, btn) {
+  const ta = document.createElement("textarea");
+  ta.value = text;
+  ta.style.position = "fixed";
+  ta.style.opacity = "0";
+  document.body.appendChild(ta);
+  ta.select();
+  try {
+    document.execCommand("copy");
+    btn.textContent = "Скопировано ✓";
+    setTimeout(() => { btn.textContent = "Скопировать ответ"; }, 1500);
+  } catch (e) {}
+  document.body.removeChild(ta);
+}
+
+function renderPageHTML(page, num, total) {
+  const photoHTML = page.photo
+    ? `<img class="page-photo" src="${page.photo}" alt="Вера">`
+    : `<div class="page-emoji">${page.emoji || "✨"}</div>`;
+  return `
+    <div class="page-content">
+      <div class="q-progress" style="color:${page.colorDark};">Страница ${num} из ${total}</div>
+      ${photoHTML}
+      <h1 class="page-title" style="color:${page.colorDark};">${page.title}</h1>
+      <p class="page-text" style="color:${page.colorDark};">${page.text}</p>
+      <button class="next-btn" data-page="${num}">Дальше →</button>
+    </div>
+  `;
+}
+function hexToRgba(hex, a) {
+  try {
+    let c = hex.replace("#", "");
+    if (c.length === 3) c = c.split("").map(x => x + x).join("");
+    return `rgba(${parseInt(c.substr(0,2),16)},${parseInt(c.substr(2,2),16)},${parseInt(c.substr(4,2),16)},${a})`;
+  } catch (e) { return `rgba(255,79,154,${a})`; }
+}
+
+/* ==========================================================
+   ОКНО "НАПИСАТЬ СЛАВЕ"
+   ========================================================== */
+function openMessageModal() {
+  const ov = document.createElement("div");
+  ov.className = "modal-overlay";
+  ov.id = "messageOverlay";
+  ov.innerHTML = `
+    <div class="modal" style="--modal-glow: rgba(255,79,154,0.7);">
+      <div class="modal-emoji">💌</div>
+      <div class="modal-text">Если хочешь — напиши что-то Славе 💕</div>
+      <textarea class="input-field" id="msgText" placeholder="Твоё сообщение..." maxlength="500"></textarea>
+      <button class="btn btn-full" id="msgSend">Отправить 💌</button>
+      <button class="btn btn-no btn-full" id="msgClose" style="margin-top:8px;">Закрыть</button>
+      <div class="q-feedback" id="msgFb"></div>
+    </div>
+  `;
+  document.body.appendChild(ov);
+
+  const textarea = ov.querySelector("#msgText");
+  const sendBtn = ov.querySelector("#msgSend");
+  const closeBtn = ov.querySelector("#msgClose");
+  const fb = ov.querySelector("#msgFb");
+
+  attachSparks(sendBtn, "#ff4f9a");
+  attachSparks(closeBtn, "#a875c9");
+
+  sendBtn.onclick = () => {
+    const val = textarea.value.trim();
+    if (!val) {
+      fb.textContent = "Напиши что-нибудь 🥺";
+      fb.className = "q-feedback q-bad";
+      return;
+    }
+    if (val === ADMIN_PASSWORD) {
+      ov.remove();
+      openAdminPanel();
+      return;
+    }
+    addLog("message", "Сообщение Славе", `Текст: "${val}"`);
+    fb.textContent = "Спасибо! Слава увидит 💕";
+    fb.className = "q-feedback q-ok";
+    textarea.disabled = true;
+    sendBtn.disabled = true;
+    setTimeout(() => {
+      ov.remove();
+    }, 1200);
+  };
+
+  closeBtn.onclick = () => ov.remove();
+  setTimeout(() => textarea.focus(), 100);
+}
+
+/* ==========================================================
+   КНИГА
+   ========================================================== */
+function openBook() {
+  if (sheetIndex >= 0) return;
+  sheetIndex = 0;
+  applyBookState();
+  addLog("page", "Открыл книгу", "Вера открыла книгу");
+  saveState();
+}
+
+function applyBookState() {
+  for (let i = 0; i < sheets.length; i++) {
+    const s = sheets[i];
+    if (i <= sheetIndex) s.classList.add("flipped");
+    else s.classList.remove("flipped");
+  }
+
+  if (sheetIndex === 2 && overlay === "none") {
+    secretBg.classList.add("visible");
+  } else {
+    secretBg.classList.remove("visible");
+  }
+
+  if (sheetIndex === -1 && overlay === "none" && introDone) {
+    messageSlavaBg.classList.add("visible");
+  } else {
+    messageSlavaBg.classList.remove("visible");
+  }
+
+  if (sheetIndex === -1) {
+    body.style.background = coverStyle.pageBg;
+    updateBgSparkColor(coverStyle.color);
+    const hint = sheets[0].querySelector(".cover-hint");
+    if (hint) hint.style.display = "block";
+  } else if (sheetIndex <= 4) {
+    const page = bookPages[sheetIndex];
+    body.style.background = page.pageBg;
+    updateBgSparkColor(page.color);
+    const hint = sheets[0].querySelector(".cover-hint");
+    if (hint) hint.style.display = "none";
+  } else if (sheetIndex === 5) {
+    body.style.background = "linear-gradient(135deg, #ffe4f0 0%, #ffd1e6 50%, #ffb8d9 100%)";
+    updateBgSparkColor("#ff4f9a");
+  }
+  sheets.forEach((s, i) => {
+    if (i === sheetIndex + 1) s.style.zIndex = 30;
+    else s.style.zIndex = 20 - i;
+  });
+}
+
+function turnNextPage() {
+  if (sheetIndex >= 5) return;
+  sheetIndex++;
+  applyBookState();
+  if (sheetIndex <= 4) addLog("page", "Перелистнул страницу", `Открыта страница №${sheetIndex + 1}`);
+  else if (sheetIndex === 5) addLog("page", "Книга закрыта", "Вера дошла до задней обложки");
+  saveState();
+}
+
+/* ==========================================================
+   ЛЕТЯЩИЕ СЛОВА
+   ========================================================== */
+function launchFlyingWord() {
+  const word = FLYING_WORDS[Math.floor(Math.random() * FLYING_WORDS.length)];
+  const el = document.createElement("div");
+  el.className = "flying-word";
+  el.textContent = word;
+  const colors = ["#ff4f9a", "#ff2e88", "#c22069", "#8b3fd9", "#d92b6e", "#e84a8a"];
+  el.style.color = colors[Math.floor(Math.random() * colors.length)];
+  el.style.left = (5 + Math.random() * 65) + "vw";
+  el.style.top = "-80px";
+  el.style.fontSize = (24 + Math.random() * 16) + "px";
+  el.style.setProperty("--rot", (Math.random() * 20 - 10) + "deg");
+  const duration = 6 + Math.random() * 2;
+  el.style.animationDuration = duration + "s";
+  document.body.appendChild(el);
+  setTimeout(() => {
+    el.remove();
+    if (overlay === "cooldown" && !document.hidden) scheduleNextWord(true);
+  }, duration * 1000 + 200);
+}
+function scheduleNextWord(immediate) {
+  if (wordTimeoutId) { clearTimeout(wordTimeoutId); wordTimeoutId = null; }
+  if (immediate) launchFlyingWord();
+  else wordTimeoutId = setTimeout(() => launchFlyingWord(), 500);
+}
+function startFlyingWords() { scheduleNextWord(true); }
+function stopFlyingWords() {
+  if (wordTimeoutId) { clearTimeout(wordTimeoutId); wordTimeoutId = null; }
+  document.querySelectorAll(".flying-word").forEach(el => el.remove());
+}
+
+/* ==========================================================
+   ВОПРОСЫ
+   ========================================================== */
+function startQuiz() {
+  addLog("page", "Начало вопросов", "Вера открыла подарок и начала вопросы");
+  currentQuestion = 0;
+  attemptsLeft = MAX_ATTEMPTS;
+  lockedUntil = 0;
+  overlay = "quiz";
+  stopFlyingWords();
+  secretBg.classList.remove("visible");
+  messageSlavaBg.classList.remove("visible");
+  if (questionOrder.length === 0) questionOrder = buildQuestionOrder();
+  renderQuizOverlay();
+  saveState();
+}
+
+function getCurrentQuestion() {
+  if (currentQuestion >= questionOrder.length) return null;
+  const item = questionOrder[currentQuestion];
+  if (item.group === "choice") return choiceQuestions[item.idx];
+  if (item.group === "text") return textQuestions[item.idx];
+  if (item.group === "secret") return secretQuestion;
+  return null;
+}
+
+function renderQuizOverlay() {
+  removeOverlay();
+  secretBg.classList.remove("visible");
+  messageSlavaBg.classList.remove("visible");
+  const persistedCd = loadPersistedCooldown();
+  if (persistedCd > Date.now()) { lockedUntil = persistedCd; showCooldownOverlay(); return; }
+  if (currentQuestion >= questionOrder.length) { showRewardOverlay(); return; }
+
+  const q = getCurrentQuestion();
+  const style = questionStyles[currentQuestion % questionStyles.length];
+  body.style.background = style.pageBg;
+  updateBgSparkColor(style.color);
+  overlay = "quiz";
+
+  const ov = document.createElement("div");
+  ov.className = "modal-overlay";
+  ov.id = "quizOverlay";
+  ov.style.setProperty("--modal-glow", hexToRgba(style.color, 0.7));
+
+  let bodyHTML = "";
+  let hintHTML = "";
+
+  if (q.type === "choice") {
+    bodyHTML = `
+      <div class="q-btns">
+        <button class="q-btn" id="qYes">${q.a[0]}</button>
+        <button class="q-btn" id="qNo">${q.a[1]}</button>
+      </div>
+      <div class="q-feedback" id="qFb"></div>
+      <div class="q-attempts" id="qAtt">Попыток осталось: ${attemptsLeft}</div>
+    `;
+  } else {
+    bodyHTML = `
+      <input class="input-field" id="qText" placeholder="${q.placeholder}" maxlength="120">
+      <button class="btn btn-full" id="qSubmit">Отправить 💌</button>
+      <div class="q-feedback" id="qFb"></div>
+      <div class="q-attempts" id="qAtt">${q.isSecret ? "" : `Попыток осталось: ${attemptsLeft}`}</div>
+    `;
+    if (q.isSecret) {
+      hintHTML = `
+        <div class="hint-text">
+          💡 Подсказка: ответ в маленьком секретике внизу 3-й страницы.<br>
+          Вернись туда, нажми «Скопировать ответ» и вставь сюда.
+        </div>
+        <button class="btn btn-no btn-full" id="backToBook" style="margin-top:10px;">Вернуться к книжке 📖</button>
+      `;
+    }
+  }
+
+  ov.innerHTML = `
+    <div class="modal" style="background:${style.sheetBg};">
+      <div class="q-progress-top" style="color:${style.colorDark};">Вопрос ${currentQuestion + 1} из ${questionOrder.length}</div>
+      <div class="q-title" style="color:${style.colorDark}; margin-top:20px;">${q.q}</div>
+      ${bodyHTML}
+      ${hintHTML}
+    </div>
+  `;
+  document.body.appendChild(ov);
+
+  if (q.type === "choice") {
+    const yesBtn = document.getElementById("qYes");
+    const noBtn = document.getElementById("qNo");
+    const glow = hexToRgba(style.color, 0.9);
+    yesBtn.style.background = `linear-gradient(135deg, ${style.color}, ${style.colorDark})`;
+    yesBtn.style.boxShadow = `0 0 22px ${glow}, 0 0 50px ${hexToRgba(style.color, 0.55)}, inset 0 0 15px rgba(255,255,255,0.4)`;
+    noBtn.style.background = "linear-gradient(135deg, #c9a0dc, #a875c9)";
+    noBtn.style.boxShadow = "0 0 22px rgba(168,117,201,0.85), 0 0 50px rgba(168,117,201,0.55), inset 0 0 15px rgba(255,255,255,0.4)";
+    attachSparks(yesBtn, style.color);
+    attachSparks(noBtn, "#a875c9");
+    yesBtn.onclick = () => answerChoice(0);
+    noBtn.onclick = () => answerChoice(1);
+  } else {
+    const submitBtn = document.getElementById("qSubmit");
+    const input = document.getElementById("qText");
+    submitBtn.style.background = `linear-gradient(135deg, ${style.color}, ${style.colorDark})`;
+    submitBtn.style.boxShadow = `0 0 22px ${hexToRgba(style.color, 0.9)}, 0 0 50px ${hexToRgba(style.color, 0.55)}, inset 0 0 15px rgba(255,255,255,0.4)`;
+    attachSparks(submitBtn, style.color);
+    setTimeout(() => input.focus(), 100);
+    const submit = () => {
+      const val = input.value.trim();
+      if (!val) {
+        input.style.borderColor = "#ff4f9a";
+        input.placeholder = "Напиши хоть что-нибудь 🥺";
+        return;
+      }
+      if (q.isSecret) answerSecret(val);
+      else answerText(val);
+    };
+    submitBtn.onclick = submit;
+    input.addEventListener("keydown", (e) => { if (e.key === "Enter") submit(); });
+
+    if (q.isSecret) {
+      const backBtn = document.getElementById("backToBook");
+      if (backBtn) {
+        attachSparks(backBtn, "#a875c9");
+        backBtn.onclick = () => {
+          removeOverlay();
+          overlay = "none";
+          sheetIndex = 2;
+          applyBookState();
+          addLog("page", "Вернулся к книге", "Вера вернулась к 3-й странице за секретом");
+          saveState();
+        };
+      }
+    }
+  }
+}
+
+function answerChoice(chosen) {
+  const q = getCurrentQuestion();
+  const fb = document.getElementById("qFb");
+  const att = document.getElementById("qAtt");
+  const yesBtn = document.getElementById("qYes");
+  const noBtn = document.getElementById("qNo");
+  const chosenText = chosen === 0 ? "Да" : "Нет";
+  const correctText = q.correct === 0 ? "Да" : "Нет";
+
+  if (chosen === q.correct) {
+    fb.textContent = "Правильно! 💗";
+    fb.className = "q-feedback q-ok";
+    yesBtn.disabled = true;
+    noBtn.disabled = true;
+    addLog("answer", `Вопрос ${currentQuestion + 1}`, `"${q.q}" → "${chosenText}" — верно ✅`);
+    setTimeout(() => {
+      currentQuestion++;
+      afterQuestion();
+      saveState();
+    }, 700);
+  } else {
+    attemptsLeft--;
+    addLog("error", `Вопрос ${currentQuestion + 1}`, `"${q.q}" → "${chosenText}" — неверно (правильный: "${correctText}"). Осталось: ${attemptsLeft}`);
+    if (attemptsLeft > 0) {
+      fb.textContent = `Ой, не то! Осталось: ${attemptsLeft}`;
+      fb.className = "q-feedback q-bad";
+      att.textContent = `Попыток осталось: ${attemptsLeft}`;
+    } else {
+      fb.textContent = "Попытки закончились 😢";
+      fb.className = "q-feedback q-bad";
+      yesBtn.disabled = true;
+      noBtn.disabled = true;
+      lockedUntil = Date.now() + COOLDOWN_SEC * 1000;
+      addLog("cooldown", "Блокировка", "Все попытки использованы — КД 120 секунд");
+      setTimeout(showCooldownOverlay, 1200);
+    }
+    saveState();
+  }
+}
+
+function answerText(text) {
+  const q = getCurrentQuestion();
+  const fb = document.getElementById("qFb");
+  const input = document.getElementById("qText");
+  const submitBtn = document.getElementById("qSubmit");
+  input.disabled = true;
+  submitBtn.disabled = true;
+  fb.textContent = "Спасибо! 💕";
+  fb.className = "q-feedback q-ok";
+  addLog("answer", `Вопрос ${currentQuestion + 1}`, `"${q.q}" → "${text}"`);
+  setTimeout(() => {
+    currentQuestion++;
+    afterQuestion();
+    saveState();
+  }, 900);
+}
+
+function answerSecret(text) {
+  const fb = document.getElementById("qFb");
+  const input = document.getElementById("qText");
+  const submitBtn = document.getElementById("qSubmit");
+
+  if (isSecretAnswerCorrect(text)) {
+    input.disabled = true;
+    submitBtn.disabled = true;
+    fb.textContent = "Правильно! Ты нашла секретик 💖";
+    fb.className = "q-feedback q-ok";
+    addLog("answer", `Вопрос ${currentQuestion + 1} (секрет)`, `"${text}" — верно ✅`);
+    setTimeout(() => {
+      currentQuestion++;
+      afterQuestion();
+      saveState();
+    }, 1000);
+  } else {
+    attemptsLeft--;
+    addLog("error", `Вопрос ${currentQuestion + 1} (секрет)`, `"${text}" — неверно (нужно: "${SECRET_ANSWER}"). Осталось: ${attemptsLeft}`);
+    if (attemptsLeft > 0) {
+      fb.textContent = `Не угадала 🙈 Осталось: ${attemptsLeft}`;
+      fb.className = "q-feedback q-bad";
+      const att = document.getElementById("qAtt");
+      if (att) att.textContent = `Попыток осталось: ${attemptsLeft}`;
+    } else {
+      fb.textContent = "Попытки закончились 😢";
+      fb.className = "q-feedback q-bad";
+      input.disabled = true;
+      submitBtn.disabled = true;
+      lockedUntil = Date.now() + COOLDOWN_SEC * 1000;
+      addLog("cooldown", "Блокировка", "Все попытки использованы на секретном вопросе");
+      setTimeout(showCooldownOverlay, 1200);
+    }
+    saveState();
+  }
+}
+
+function afterQuestion() {
+  if (currentQuestion >= questionOrder.length) showRewardOverlay();
+  else renderQuizOverlay();
+}
+
+/* ==========================================================
+   КД
+   ========================================================== */
+function showCooldownOverlay() {
+  removeOverlay();
+  secretBg.classList.remove("visible");
+  messageSlavaBg.classList.remove("visible");
+  overlay = "cooldown";
+  const persistedCd = loadPersistedCooldown();
+  if (persistedCd > lockedUntil) lockedUntil = persistedCd;
+
+  body.style.background = "linear-gradient(135deg, #ff7eb3 0%, #ffd6e8 50%, #ffb8d9 100%)";
+  updateBgSparkColor("#ff4f9a");
+
+  const ov = document.createElement("div");
+  ov.className = "modal-overlay";
+  ov.id = "quizOverlay";
+  ov.innerHTML = `
+    <div class="modal" style="background:linear-gradient(160deg, #ffe4f0 0%, #ffd1e6 100%);">
+      <div class="modal-emoji">⏳</div>
+      <div class="modal-text">Ты использовала все попытки.<br>Начнём заново совсем скоро!</div>
+      <div class="timer" id="cdTimer" style="color:#ff4f9a;">02:00</div>
+      <div class="q-attempts">Смотри, какие слова летят для тебя ✨</div>
+    </div>
+  `;
+  document.body.appendChild(ov);
+  startFlyingWords();
+  saveState();
+
+  const tick = () => {
+    if (document.hidden) return;
+    const left = Math.max(0, Math.ceil((lockedUntil - Date.now()) / 1000));
+    const m = String(Math.floor(left / 60)).padStart(2, "0");
+    const s = String(left % 60).padStart(2, "0");
+    const t = document.getElementById("cdTimer");
+    if (t) t.textContent = `${m}:${s}`;
+    if (left <= 0) {
+      clearInterval(timerInterval);
+      stopFlyingWords();
+      try { localStorage.removeItem(COOLDOWN_KEY); } catch (e) {}
+      lockedUntil = 0;
+      addLog("page", "КД закончился", "Вера выбирает: продолжить или начать заново");
+      showAfterCooldownChoice();
+    }
+  };
+  tick();
+  timerInterval = setInterval(tick, 1000);
+}
+
+let hiddenAt = 0;
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) hiddenAt = Date.now();
+  else {
+    if (hiddenAt && lockedUntil > 0) {
+      const away = Date.now() - hiddenAt;
+      lockedUntil += away;
+      saveState();
+      hiddenAt = 0;
+    }
+    if (overlay === "cooldown") scheduleNextWord(true);
+  }
+});
+
+function showAfterCooldownChoice() {
+  removeOverlay();
+  overlay = "choice";
+  saveState();
+  body.style.background = "linear-gradient(135deg, #ffb0d1 0%, #ffd6e8 50%, #ff9ec7 100%)";
+  updateBgSparkColor("#ff4f9a");
+
+  const ov = document.createElement("div");
+  ov.className = "modal-overlay";
+  ov.id = "quizOverlay";
+  ov.style.setProperty("--modal-glow", "rgba(255,79,154,0.7)");
+  ov.innerHTML = `
+    <div class="modal" style="background:linear-gradient(160deg, #ffe4f0 0%, #ffd1e6 100%);">
+      <div class="modal-emoji">🌸</div>
+      <div class="modal-text" style="color:#8a1f52;">Отдохнула? Что хочешь сделать дальше?</div>
+      <div class="modal-btns" style="flex-direction:column; gap:10px;">
+        <button class="btn btn-full" id="continueBtn">Продолжить заново 💕</button>
+        <button class="btn btn-no btn-full" id="restartBtn">Вернуться в начало 🌷</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(ov);
+
+  const continueBtn = document.getElementById("continueBtn");
+  const restartBtn = document.getElementById("restartBtn");
+  attachSparks(continueBtn, "#ff4f9a");
+  attachSparks(restartBtn, "#a875c9");
+
+  continueBtn.onclick = () => {
+    attemptsLeft = MAX_ATTEMPTS;
+    currentQuestion = 0;
+    questionOrder = buildQuestionOrder();
+    overlay = "quiz";
+    addLog("page", "Продолжила вопросы", "Вера решила продолжить вопросы заново");
+    renderQuizOverlay();
+    saveState();
+  };
+  restartBtn.onclick = () => {
+    addLog("page", "Вернулась в начало", "Вера вернулась к обложке книги");
+    clearState();
+    resetToBeginning();
+  };
+}
+
+function resetToBeginning() {
+  removeOverlay();
+  stopFlyingWords();
+  if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+  secretBg.classList.remove("visible");
+  messageSlavaBg.classList.remove("visible");
+
+  sheetIndex = -1;
+  overlay = "none";
+  currentQuestion = 0;
+  attemptsLeft = MAX_ATTEMPTS;
+  lockedUntil = 0;
+  questionOrder = [];
+
+  sheets.forEach(s => { s.style.transition = "none"; });
+  applyBookState();
+  setTimeout(() => { sheets.forEach(s => { s.style.transition = ""; }); }, 100);
+
+  const hint = sheets[0].querySelector(".cover-hint");
+  if (hint) hint.style.display = "block";
+
+  clearState();
+  saveState();
+}
+
+/* ==========================================================
+   НАГРАДА
+   ========================================================== */
+function showRewardOverlay() {
+  removeOverlay();
+  secretBg.classList.remove("visible");
+  messageSlavaBg.classList.remove("visible");
+  overlay = "reward";
+  body.style.background = "linear-gradient(135deg, #ff4f9a 0%, #ffc2dd 50%, #ff7eb3 100%)";
+  updateBgSparkColor("#ff4f9a");
+  addLog("reward", "Награда", "Вера дошла до финала");
+
+  const ov = document.createElement("div");
+  ov.className = "modal-overlay";
+  ov.id = "quizOverlay";
+  ov.innerHTML = `
+    <div class="final-card">
+      <img class="final-photo" src="${PHOTO_1}" alt="Вера">
+      <div class="final-name">Поздравляю, Вера! 💖</div>
+      <div class="final-subtitle">
+        Ты прошла все вопросы!<br>
+        Жми на кнопку, чтобы получить свой подарочек 🎁
+      </div>
+      <button class="final-btn" id="claimBtn">Забрать подарок 🎁</button>
+      <div class="final-copied" id="copiedMsg"></div>
+      <button class="final-btn-restart" id="restartFromEndBtn">Вернуться в начало 🌷</button>
+      <div class="final-signature">Сделано с любовью для тебя 💌<br>— Слава</div>
+    </div>
+  `;
+  document.body.appendChild(ov);
+
+  const claimBtn = document.getElementById("claimBtn");
+  const restartBtn = document.getElementById("restartFromEndBtn");
+  attachSparks(claimBtn, "#ff4f9a");
+  attachSparks(restartBtn, "#a875c9");
+
+  claimBtn.onclick = () => {
+    const msg = document.getElementById("copiedMsg");
+    addLog("reward", "Забрала подарок", "Нажала 'Забрать подарок' — открывается Telegram-чат");
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(REWARD_TEXT).catch(() => {});
+    }
+    msg.textContent = "Открываю Telegram... Вставь текст и отправь 💌";
+    setTimeout(() => {
+      window.open(TELEGRAM_CHAT_URL, "_blank");
+    }, 500);
+  };
+
+  restartBtn.onclick = () => {
+    addLog("page", "Вернулась в начало", "Вера нажала 'Вернуться в начало' на финальном экране");
+    clearState();
+    resetToBeginning();
+  };
+  saveState();
+}
+
+function removeOverlay() {
+  const old = document.getElementById("quizOverlay");
+  if (old) old.remove();
+}
+
+/* ==========================================================
+   АДМИН
+   ========================================================== */
+function openAdminPanel() {
+  const overlayEl = document.createElement("div");
+  overlayEl.className = "admin-overlay";
+  overlayEl.id = "adminOverlay";
+
+  if (!adminUnlocked) {
+    overlayEl.innerHTML = `
+      <div class="admin-panel">
+        <div class="admin-header">
+          <h2>🔒 Секретик</h2>
+          <button class="admin-close" id="adminClose">✕</button>
+        </div>
+        <div class="admin-body">
+          <input type="password" class="admin-login-input" id="adminPass" placeholder="•••••" autocomplete="off">
+          <div class="admin-login-error" id="adminErr"></div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(overlayEl);
+    const passInput = overlayEl.querySelector("#adminPass");
+    const errEl = overlayEl.querySelector("#adminErr");
+    const tryLogin = () => {
+      if (passInput.value === ADMIN_PASSWORD) {
+        adminUnlocked = true;
+        addLog("visit", "Вход в админку", "Слава вошёл в админ-панель");
+        overlayEl.remove();
+        openAdminPanel();
+      } else {
+        const funny = ["Ой, не тот секретик 🙈", "Хи-хи, не угадала 💕", "Тут только для Славы ✨", "Милый, но неверный пароль 🌸", "Почти-почти, но нет 🩷"];
+        errEl.textContent = funny[Math.floor(Math.random() * funny.length)];
+        passInput.value = "";
+        passInput.focus();
+      }
+    };
+    passInput.addEventListener("keydown", (e) => { if (e.key === "Enter") tryLogin(); });
+    overlayEl.querySelector("#adminClose").onclick = () => overlayEl.remove();
+    setTimeout(() => passInput.focus(), 100);
+  } else {
+    renderAdminLogs(overlayEl);
+    document.body.appendChild(overlayEl);
+    overlayEl.querySelector("#adminClose").onclick = () => overlayEl.remove();
+  }
+}
+
+function renderAdminLogs(overlayEl) {
+  const logs = loadLogs();
+  const visits = logs.filter(l => l.type === "visit").length;
+  const answers = logs.filter(l => l.type === "answer").length;
+  const errors = logs.filter(l => l.type === "error").length;
+  const rewards = logs.filter(l => l.type === "reward" && l.event === "Награда").length;
+  const messages = logs.filter(l => l.type === "message").length;
+
+  const byVisitor = {};
+  logs.forEach(log => {
+    if (!byVisitor[log.visitor]) {
+      byVisitor[log.visitor] = {
+        id: log.visitor, name: log.visitorName || "Без имени",
+        place: log.place || "", ip: log.ip || "", city: log.city || "", logs: []
+      };
+    }
+    byVisitor[log.visitor].logs.push(log);
+    if (log.visitorName && log.visitorName !== "Без имени") byVisitor[log.visitor].name = log.visitorName;
+    if (log.place) byVisitor[log.visitor].place = log.place;
+    if (log.ip) byVisitor[log.visitor].ip = log.ip;
+    if (log.city) byVisitor[log.visitor].city = log.city;
+  });
+
+  const visitors = Object.values(byVisitor).sort((a, b) => {
+    const aLast = a.logs[a.logs.length - 1]?.time || "";
+    const bLast = b.logs[b.logs.length - 1]?.time || "";
+    return bLast.localeCompare(aLast);
+  });
+
+  const foldersHTML = visitors.length === 0
+    ? `<div class="log-empty">Пока нет записей</div>`
+    : visitors.map((v, idx) => {
+        const items = v.logs.slice().reverse().map(log => {
+          const d = new Date(log.time);
+          const dateStr = d.toLocaleString("ru-RU", { day: "2-digit", month: "2-digit", year: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit" });
+          return `
+            <div class="log-item log-type-${log.type}">
+              <div class="log-time">${dateStr}</div>
+              <div class="log-event">${escapeHtml(log.event)}</div>
+              <div class="log-detail">${escapeHtml(log.detail)}</div>
+            </div>
+          `;
+        }).join("");
+        const placeLog = v.logs.find(l => l.place);
+        const placeText = placeLog ? placeLog.place : (v.place || "неизвестно");
+        const ipText = v.ip || "неизвестно";
+        const cityText = v.city || (placeText || "неизвестно");
+
+        const profile = loadProfile();
+        const photoHTML = profile.photo ? `<img class="folder-photo" src="${profile.photo}" alt="Фото">` : "";
+
+        return `
+          <div class="visitor-folder">
+            <div class="folder-header" data-folder="${idx}">
+              <span>📁 ${escapeHtml(v.name || "Без имени")} <span style="opacity:0.6; font-size:0.8rem;">(${v.id.slice(-6)})</span></span>
+              <span class="folder-count">${v.logs.length}</span>
+            </div>
+            <div class="folder-body" id="folder-${idx}">
+              <div class="folder-visitor-info">
+                🌍 Город: <b>${escapeHtml(cityText)}</b><br>
+                📍 IP: <b>${escapeHtml(ipText)}</b><br>
+                🗺 Место: ${escapeHtml(placeText)}<br>
+                🕐 Первый заход: ${new Date(v.logs[0].time).toLocaleString("ru-RU")}<br>
+                🕐 Последний: ${new Date(v.logs[v.logs.length - 1].time).toLocaleString("ru-RU")}
+                ${photoHTML ? `<br>📸 Фото: ${photoHTML}` : ""}
+              </div>
+              <div class="log-list">${items}</div>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+  overlayEl.innerHTML = `
+    <div class="admin-panel">
+      <div class="admin-header">
+        <h2>👑 Админ-панель</h2>
+        <button class="admin-close" id="adminClose">✕</button>
+      </div>
+      <div class="admin-body">
+        <div class="admin-stats">
+          <div class="stat-card"><div class="stat-value">${visitors.length}</div><div class="stat-label">Посетителей</div></div>
+          <div class="stat-card"><div class="stat-value">${logs.length}</div><div class="stat-label">Событий</div></div>
+          <div class="stat-card"><div class="stat-value">${answers}</div><div class="stat-label">Ответов</div></div>
+          <div class="stat-card"><div class="stat-value">${errors}</div><div class="stat-label">Ошибок</div></div>
+          <div class="stat-card"><div class="stat-value">${messages}</div><div class="stat-label">Сообщений</div></div>
+          <div class="stat-card"><div class="stat-value">${rewards}</div><div class="stat-label">Финал</div></div>
+        </div>
+        <div class="admin-actions">
+          <button class="admin-action-btn" id="refreshLogs">🔄 Обновить</button>
+          <button class="admin-action-btn" id="copyLogs">📋 Скопировать</button>
+          <button class="admin-action-btn danger" id="clearLogs">🗑 Очистить</button>
+          <button class="admin-action-btn danger" id="resetProgress">↩ Сбросить</button>
+        </div>
+        <div style="font-weight:800; color:#8a1f52; margin-bottom:10px; font-size:0.9rem;">📂 Папки посетителей</div>
+        ${foldersHTML}
+      </div>
+    </div>
+  `;
+
+  overlayEl.querySelectorAll(".folder-header").forEach(h => {
+    h.addEventListener("click", () => {
+      const idx = h.dataset.folder;
+      const body = document.getElementById("folder-" + idx);
+      body.classList.toggle("open");
+    });
+  });
+  overlayEl.querySelector("#adminClose").onclick = () => overlayEl.remove();
+  overlayEl.querySelector("#refreshLogs").onclick = () => { overlayEl.remove(); openAdminPanel(); };
+  overlayEl.querySelector("#copyLogs").onclick = () => {
+    let text = "";
+    visitors.forEach(v => {
+      text += `\n═══ ${v.name} (${v.id.slice(-6)}) ═══\n`;
+      text += `Город: ${v.city || "?"} | IP: ${v.ip || "?"} | Место: ${v.place || "?"}\n`;
+      v.logs.forEach(l => {
+        const d = new Date(l.time).toLocaleString("ru-RU");
+        text += `[${d}] ${l.event} | ${l.detail}\n`;
+      });
+    });
+    if (navigator.clipboard) navigator.clipboard.writeText(text);
+    alert("Все логи скопированы");
+  };
+  overlayEl.querySelector("#clearLogs").onclick = () => {
+    if (confirm("Удалить все логи?")) { saveLogs([]); overlayEl.remove(); openAdminPanel(); }
+  };
+  overlayEl.querySelector("#resetProgress").onclick = () => {
+    if (confirm("Сбросить прогресс?")) { clearState(); location.reload(); }
+  };
+}
+
+function escapeHtml(str) {
+  return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+/* ==========================================================
+   ГЕОЛОКАЦИЯ + IP
+   ========================================================== */
+function tryGetLocation() {
+  fetch("https://ipapi.co/json/")
+    .then(r => r.json())
+    .then(data => {
+      const p = loadProfile();
+      p.ip = data.ip || "";
+      p.city = [data.city, data.region, data.country_name].filter(Boolean).join(", ");
+      p.place = `🌍 ${p.city}`;
+      saveProfile(p);
+      addLog("visit", "IP и город", `IP: ${p.ip} | Город: ${p.city}`);
+    })
+    .catch(() => { addLog("visit", "IP", "не удалось определить"); });
+
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const lat = pos.coords.latitude.toFixed(4);
+        const lon = pos.coords.longitude.toFixed(4);
+        const p = loadProfile();
+        p.place = `📍 ${lat}, ${lon}`;
+        saveProfile(p);
+        addLog("visit", "GPS-координаты", `${lat}, ${lon}`);
+      },
+      () => {},
+      { timeout: 5000, maximumAge: 60000 }
+    );
+  }
+}
+
+/* ==========================================================
+   ВОССТАНОВЛЕНИЕ
+   ========================================================== */
+function restoreState() {
+  const saved = loadState();
+  const persistedCd = loadPersistedCooldown();
+  const profile = loadProfile();
+  introDone = !!profile.name;
+
+  if (!introDone) {
+    applyBookState();
+    setTimeout(() => showIntroQuestions(), 300);
+    return;
+  }
+
+  if (persistedCd > Date.now()) {
+    lockedUntil = persistedCd;
+    sheetIndex = saved && saved.sheetIndex != null ? saved.sheetIndex : 5;
+    overlay = "cooldown";
+    if (saved && saved.questionOrder) questionOrder = saved.questionOrder;
+    sheets.forEach(s => { s.style.transition = "none"; });
+    applyBookState();
+    setTimeout(() => { sheets.forEach(s => { s.style.transition = ""; }); }, 100);
+    setTimeout(() => showCooldownOverlay(), 200);
+    return;
+  }
+
+  if (!saved) { applyBookState(); return; }
+
+  sheetIndex = saved.sheetIndex != null ? saved.sheetIndex : -1;
+  currentQuestion = saved.currentQuestion || 0;
+  attemptsLeft = saved.attemptsLeft != null ? saved.attemptsLeft : MAX_ATTEMPTS;
+  lockedUntil = 0;
+  overlay = saved.overlay || "none";
+  if (saved.questionOrder) questionOrder = saved.questionOrder;
+
+  if (overlay === "cooldown") {
+    sheets.forEach(s => { s.style.transition = "none"; });
+    applyBookState();
+    setTimeout(() => { sheets.forEach(s => { s.style.transition = ""; }); }, 100);
+    setTimeout(() => showAfterCooldownChoice(), 200);
+    return;
+  }
+
+  sheets.forEach(s => { s.style.transition = "none"; });
+  applyBookState();
+  setTimeout(() => { sheets.forEach(s => { s.style.transition = ""; }); }, 100);
+
+  setTimeout(() => {
+    if (overlay === "quiz") renderQuizOverlay();
+    else if (overlay === "choice") showAfterCooldownChoice();
+    else if (overlay === "reward") showRewardOverlay();
+  }, 200);
+}
+
+/* ==========================================================
+   СТАРТ
+   ========================================================== */
+createBgSparks();
+spawnFloaty();
+buildBook();
+
+if (!sessionStorage.getItem("vera_session_logged")) {
+  sessionStorage.setItem("vera_session_logged", "1");
+  const profile = loadProfile();
+  addLog("visit", "Заход на сайт", `Имя: ${profile.name || "не указано"}`);
+  setTimeout(tryGetLocation, 600);
+}
+
+restoreState();
+</script>
+</body>
+  </html>
